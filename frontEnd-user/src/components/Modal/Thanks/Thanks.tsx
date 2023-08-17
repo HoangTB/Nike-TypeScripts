@@ -49,18 +49,20 @@ const Thanks: React.FC<any> = ({ dataArr, handleCloseForm }) => {
               height: 48,
             }}
             createOrder={(data, actions) => {
-              console.log(data);
-              return actions.order.create({
-                purchase_units: [
-                  {
-                    amount: {
-                      currency_code: "USD",
-                      value: resultValue, // Sử dụng giá trị totalAmount ở đây
+              {
+                console.log(data);
+                return actions.order.create({
+                  purchase_units: [
+                    {
+                      amount: {
+                        currency_code: "USD",
+                        value: resultValue, // Sử dụng giá trị totalAmount ở đây
+                      },
+                      description: `Purchase at ${new Date().toLocaleString()}`,
                     },
-                    description: `Purchase at ${new Date().toLocaleString()}`,
-                  },
-                ],
-              });
+                  ],
+                });
+              }
             }}
             onApprove={(_, actions): any => {
               return actions.order?.capture().then(handlePaymentSuccess);

@@ -3,7 +3,7 @@ import Router from "./router/Router";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 function App() {
   const paypalClientId =
-    "Af5Te-Z2KWf7cOM-TbLhk9Dj8aEhpLLB9w-IJ09jsi1bmT5H56mTVjU-YSd2DWE-8ElwcJc006NjgEfR";
+    "AV8c5J5AoT8jw3NylpoH5K1um9_IYn7IbroEn7cB1v-wXuccdCSqKnQXmSy7KI1dYjwBVvgfjn2KVPwO";
   return (
     <PayPalScriptProvider options={{ clientId: paypalClientId }}>
       <Router />;

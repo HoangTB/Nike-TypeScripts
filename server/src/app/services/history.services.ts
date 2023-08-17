@@ -68,6 +68,7 @@ class historyService {
 
   getHistoryWithMonth = async (req: Request, res: Response) => {
     const { dataMonth } = req.body;
+
     try {
       const result = await History.findAll({
         include: [

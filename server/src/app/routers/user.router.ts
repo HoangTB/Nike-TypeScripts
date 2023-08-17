@@ -8,6 +8,8 @@ router.get('/', userController.getUser);
 router.get('/:id', userController.getUserId);
 router.post('/register', userController.createUser);
 router.post('/login', userController.loginUser);
+router.post('/refresh-token', userController.refreshToken);
+router.post('/logout', checkAuthentication, userController.logout);
 router.patch('/update-user/:id', userController.updateUser);
 router.patch('/update-status/:id', checkRole, userController.updateStatusByAdmin);
 router.patch('/update-role/:id', checkRole, userController.updateRoleByAdmin);

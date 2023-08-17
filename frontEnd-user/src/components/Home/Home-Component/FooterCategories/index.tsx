@@ -2,8 +2,8 @@ import React from "react";
 import "./FooterCategories.css";
 const FooterCategories: React.FC = () => {
   return (
-    <div className="container mt-5 mb-5">
-      <div className="row">
+    <div className="container mt-5 mb-5 gap-3">
+      <div className="row  w-100">
         <div className="col-md-3">
           <h5>Shoes</h5>
           <ul className="list-unstyled">

@@ -54,3 +54,27 @@ export interface UserType {
   role: number;
   status: number;
 }
+
+export interface IOrder {
+  id: number;
+  status: number;
+  order_date: Date;
+  user_id: number;
+}
+
+export interface IOrderDetails {
+  id: number;
+  quantity: number;
+  size_product: string;
+  product_id: number;
+  order_id: number;
+}
+
+export interface IUpdateOrderDetailById {
+  quantity: number;
+}
+
+export interface IUpdateOrderDetailQuantity {
+  quantity: number;
+  size_product: string;
+}

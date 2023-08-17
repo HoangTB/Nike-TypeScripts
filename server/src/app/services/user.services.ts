@@ -1,10 +1,10 @@
 import User from '../models/user.model';
 import jwt from 'jsonwebtoken';
-import { secretKey } from '../../configs/jwt.configs';
+import { secret } from '../../configs/jwt.configs';
 import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
 import { UserType } from '../../types/Type';
-
+let refreshTokenArr: any = [];
 class UserService {
   getUser = async (req: Request, res: Response) => {
     try {
@@ -58,9 +58,18 @@ class UserService {
         const myPass = await bcrypt.compare(password, user.dataValues.password);
 
         if (myPass) {
-          const accessToken = jwt.sign(user.dataValues, secretKey);
+          const accessToken = jwt.sign(user.dataValues, secret.secretKey, { expiresIn: '1d' });
+          const refreshToken = jwt.sign(user.dataValues, secret.secretKeyRefresh, { expiresIn: '365d' }); // Tạo refreshToken để dự trữ
+          refreshTokenArr.push(refreshToken);
+          const { password, ...data } = user.dataValues;
+          res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+          });
+
           res.status(200).json({
-            user: user,
+            user: data,
             accessToken,
           });
         } else {
@@ -73,6 +82,39 @@ class UserService {
     } catch (error) {
       res.status(500).json({ message: 'Not found' });
     }
+  };
+
+  refreshToken = async (req: Request, res: Response) => {
+    const refreshToken = req.cookies.refreshToken;
+    console.log('REQ', req.cookies.refreshToken);
+
+    if (!refreshToken) return res.status(401).json('Unauthenticated');
+    if (!refreshTokenArr.includes(refreshToken)) {
+      return res.status(401).json('Unauthenticated');
+    }
+    jwt.verify(refreshToken, secret.secretKeyRefresh, (err: any, user: any) => {
+      if (err) {
+        return res.status(400).json('refreshToken is not valid');
+      }
+      const { iat, exp, ...userOther } = user;
+
+      refreshTokenArr = refreshTokenArr.filter((token: string) => token !== refreshToken);
+      const newAccessToken = jwt.sign(userOther, secret.secretKey, { expiresIn: '1d' });
+      const newRefreshToken = jwt.sign(userOther, secret.secretKeyRefresh, { expiresIn: '365d' });
+      refreshTokenArr.push(newRefreshToken);
+      res.cookie('refreshToken', newRefreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      });
+      return res.status(200).json(newAccessToken);
+    });
+  };
+
+  logout = async (req: Request, res: Response) => {
+    res.clearCookie('refreshToken');
+    refreshTokenArr = refreshTokenArr.filter((token: string) => token !== req.cookies.refreshToken);
+    res.status(200).json('Logout Successfully');
   };
 
   updateUser = async (data: any, id: number, res: Response) => {

@@ -1,6 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
+import { HistoryAPIServer, IHistory } from "../../models/History";
 
 const RevenueManager: React.FC = () => {
+  const [history, setHistory] = useState<Array<IHistory>>([]);
+
+  const handleChangeMonth = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const dataMonth: string = e.target.value;
+    await HistoryAPIServer.getHistoryWithMonth({ dataMonth } as any).then(
+      (dataMonth) => setHistory(dataMonth)
+    );
+  };
+
+  const priceTotal = history?.map((h: any) => h.quantity * h.Product.price);
+
+  const revenue = priceTotal?.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0
+  );
+
+  const totalQuantity = history?.reduce(
+    (total, h) => total + (h.quantity || 0),
+    0
+  );
   return (
     <div className="content-user">
       <div className="table-content">
@@ -10,7 +31,7 @@ const RevenueManager: React.FC = () => {
         <select
           className="form-control"
           style={{ width: "100px" }}
-          // onChange={(e) => handleChangeMonth(e)}
+          onChange={(e) => handleChangeMonth(e)}
         >
           <option value="01">Month</option>
           <option value="01">01</option>
@@ -38,17 +59,17 @@ const RevenueManager: React.FC = () => {
           <tbody>
             <tr>
               <td style={{ fontSize: "25px" }}>
-                {/* {history[0] ? history[0]?.order_date.slice(0, 4) : ""} */}
+                {history[0] ? String(history[0]?.order_date!).slice(0, 4) : ""}
               </td>
               <td style={{ fontSize: "25px" }}>
-                {/* {history[0] ? history[0]?.order_date.slice(5, 7) : ""} */}
+                {history[0] ? String(history[0]?.order_date!).slice(5, 7) : ""}
               </td>
               <td style={{ fontSize: "25px" }}>
-                {/* {totalQuantity ? totalQuantity : ""} */}
+                {totalQuantity ? totalQuantity : ""}
               </td>
               <td style={{ fontSize: "25px" }}>
                 {" "}
-                {/* {revenue ? "$" + " " + revenue.toLocaleString() : ""} */}
+                {revenue ? "$" + " " + revenue.toLocaleString() : ""}
               </td>
             </tr>
           </tbody>

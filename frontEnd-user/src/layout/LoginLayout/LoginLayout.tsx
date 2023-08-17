@@ -1,14 +1,16 @@
-import React, { Children } from "react";
+import React from "react";
 import Header from "../../components/Header/Header";
-import Navibar from "../../components/Navibar/Navibar";
+
 import Footer from "../../components/Footer/Footer";
 import { DefaultLayoutProps } from "../../types/Types";
+import Navbar from "../../components/Navbar/Navbar";
 
 const LoginLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
+  const onFilteredOptions = async () => {};
   return (
     <div className="vh-100">
       <Header />
-      <Navibar />
+      <Navbar onFilteredOptions={onFilteredOptions} />
       <br />
       {children}
       <br />

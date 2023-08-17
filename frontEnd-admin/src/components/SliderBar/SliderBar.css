@@ -22,7 +22,7 @@ a{
 }
 
 .logo {
-
+  text-align: center;
   padding: 0 20px 30px;
 }
 
@@ -136,6 +136,7 @@ a{
   height: 25px;
   border-radius: 50%;
   color: white;
+  text-align: center;
 }
 @media (max-width:1200px) {
   .sidebar-wrappers {

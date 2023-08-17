@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import OrderDetail from '../models/orderDetail.model';
+import { IOrderDetails, IUpdateOrderDetailById, IUpdateOrderDetailQuantity } from '../../types/Type';
 
 class OrderDetailService {
   getOrderDetailById = async (id: number, res: Response) => {
@@ -14,26 +15,16 @@ class OrderDetailService {
     }
   };
 
-  postOrderDetail = async (data: any, res: Response) => {
+  postOrderDetail = async (data: IOrderDetails, res: Response) => {
     try {
-      const orderDetailValue = await OrderDetail.bulkCreate([data]);
+      const orderDetailValue = await OrderDetail.bulkCreate([data] as any);
       res.status(200).json({ message: 'Post successfully', orderDetailValue });
     } catch (err) {
       res.status(500).json({ message: 'Failed to create OrderDetail ', err });
     }
   };
 
-  updateOrderDetailQuantity = async (id: number, data: any, res: Response) => {
-    try {
-      const productCheckId = await OrderDetail.update(data, { where: { product_id: Number(id) } });
-
-      res.status(200).json({ message: 'Update quantity successfully completed', productCheckId });
-    } catch (err) {
-      res.status(500).json({ message: 'Error Update quantity' });
-    }
-  };
-
-  updateOrderDetailById = async (id: number, data: any, res: Response) => {
+  updateOrderDetailById = async (id: number, data: IUpdateOrderDetailById, res: Response) => {
     try {
       const orderDetailUpdate = await OrderDetail.update(data, {
         where: {
@@ -46,9 +37,19 @@ class OrderDetailService {
     }
   };
 
+  updateOrderDetailQuantity = async (id: number, data: IUpdateOrderDetailQuantity, res: Response) => {
+    try {
+      const productCheckId = await OrderDetail.update(data, { where: { product_id: Number(id) } });
+
+      res.status(200).json({ message: 'Update quantity successfully completed', productCheckId });
+    } catch (err) {
+      res.status(500).json({ message: 'Error Update quantity' });
+    }
+  };
+
   deleteOrderDetail = async (id: number, res: Response) => {
     try {
-      const orderDetail = await OrderDetail.destroy({
+      const orderDetail: any = await OrderDetail.destroy({
         where: {
           product_id: id,
         },
@@ -61,7 +62,7 @@ class OrderDetailService {
 
   deleteOrderDetailByHistory = async (id: number, res: Response) => {
     try {
-      const orderDetail = await OrderDetail.destroy({
+      const orderDetail: any = await OrderDetail.destroy({
         where: {
           order_id: id,
         },

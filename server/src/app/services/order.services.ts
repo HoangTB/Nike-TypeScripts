@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import Order from '../models/order.model';
+import { IOrder } from '../../types/Type';
 
 class orderService {
-  postOrder = async (data: any, res: Response) => {
+  postOrder = async (data: IOrder, res: Response) => {
     try {
       const existingOrder = await Order.findOne({ where: { user_id: data.user_id } });
       if (!existingOrder) {
-        const orderValue = await Order.bulkCreate([data]);
+        const orderValue = await Order.bulkCreate([data] as any);
         res.status(200).json({ message: 'Post successfully', orderValue });
       }
     } catch (err) {

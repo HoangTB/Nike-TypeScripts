@@ -21,7 +21,7 @@ class historyController {
   };
 
   updateHistoryStatus = async (req: Request, res: Response) => {
-    const data = req.body;
+    const data: HistoryType = req.body;
     const id: number = Number(req.params.id);
     historyServices.updateHistoryStatus(id, data, res);
   };

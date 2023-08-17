@@ -23,8 +23,8 @@ export interface ILogin {
 
 export class Login {
   static async LoginAdmin(param: ILoginAdmin): Promise<ILogin> {
-    const url = "http://localhost:8080/api/v1/users/login";
-    const response = await axios.post(url, param);
+    const url: string = "http://localhost:8080/api/v1/users/login";
+    const response: ILogin = await axios.post(url, param);
 
     return response;
   }

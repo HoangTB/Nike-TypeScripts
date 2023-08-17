@@ -20,7 +20,13 @@ class userController {
     const data = req.body;
     userServices.loginUser(data, res);
   };
+  refreshToken = (req: Request, res: Response) => {
+    userServices.refreshToken(req, res);
+  };
 
+  logout = (req: Request, res: Response) => {
+    userServices.logout(req, res);
+  };
   updateUser = (req: Request, res: Response) => {
     const data = req.body;
     const id: number = Number(req.params.id);

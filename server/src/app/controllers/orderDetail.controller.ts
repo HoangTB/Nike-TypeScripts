@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import orderDetailServices from '../services/orderDetail.services';
+import { IOrderDetails, IUpdateOrderDetailById, IUpdateOrderDetailQuantity } from '../../types/Type';
 
 class orderDetailService {
   getOrderDetailById = (req: Request, res: Response) => {
@@ -7,17 +8,17 @@ class orderDetailService {
     orderDetailServices.getOrderDetailById(id, res);
   };
   postOrderDetail = (req: Request, res: Response) => {
-    const data = req.body;
+    const data: IOrderDetails = req.body;
     orderDetailServices.postOrderDetail(data, res);
   };
   updateOrderDetailById = (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
-    const data = req.body;
+    const data: IUpdateOrderDetailById = req.body;
     orderDetailServices.updateOrderDetailById(id, data, res);
   };
 
   updateOrderDetailQuantity = (req: Request, res: Response) => {
-    const data = req.body;
+    const data: IUpdateOrderDetailQuantity = req.body;
     const id: number = Number(req.params.id);
     orderDetailServices.updateOrderDetailQuantity(id, data, res);
   };

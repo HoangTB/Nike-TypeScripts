@@ -15,7 +15,7 @@ class imageServices {
         }))
       );
       console.log(`Created ${createdImage.length} products`);
-      res.status(200).json({ message: 'Products created successfully' });
+      res.status(200).json(createdImage);
     } catch (err) {
       console.log(err);
       res.status(500).json({ message: 'Failed to create products', err });
@@ -59,14 +59,14 @@ class imageServices {
         image_2: url + '/images/' + files[1].filename,
         image_3: url + '/images/' + files[2].filename,
         image_4: url + '/images/' + files[3].filename,
-        product_id: req.body.product_id,
       };
       const result = await Image.update(fileData, {
         where: {
           product_id: req.params.id,
         },
       });
-      return res.status(200).json(result);
+      console.log(fileData);
+      return res.status(200).json(fileData);
     } catch (err) {
       console.log(err);
       res.status(500).json({ message: 'Failed to create products', err });

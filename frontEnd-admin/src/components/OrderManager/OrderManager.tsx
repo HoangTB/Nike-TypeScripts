@@ -1,9 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./OrderManager.css";
+import Loading from "../Loading/Loading";
+import { HistoryAPIServer, IHistory } from "../../models/History";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { updateState } from "../../store/slice/UpdateProSlice";
+import { IStatusValue } from "../../types/Type";
 const OrderManager: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [history, setHistory] = useState<Array<IHistory>>([]);
+  const dispatch = useDispatch();
+  const update = useSelector((status: any) => status.update);
+  const location = useLocation();
+  useEffect(() => {
+    HistoryAPIServer.getAllHistoryIdOrder().then((h: any) => {
+      setHistory(h);
+    });
+    setIsLoading(false);
+  }, [update, location.pathname, isLoading]);
+
+  const handleChangeStatus = async (
+    c: React.ChangeEvent<HTMLSelectElement>,
+    id: number
+  ) => {
+    const statusValue: IStatusValue = {
+      status: Number(c.target.value),
+    };
+    await HistoryAPIServer.updateHistoryStatus(id, statusValue);
+    dispatch(updateState());
+    setIsLoading(true);
+  };
   return (
     <div className="content-user">
-      {/* {isLoading && <Loading />} */}
+      {isLoading && <Loading />}
       <div className="table-content">
         <div className="wrapper-title">
           <i className="fa-solid fa-arrow-right"></i>
@@ -22,13 +52,15 @@ const OrderManager: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {/* {history &&
-              history.map((e) => {
+            {history &&
+              history.map((e: IHistory) => {
+                console.log(e);
+
                 if (e.status !== 4) {
                   return (
                     <tr key={e.id}>
                       <td>{e.id}</td>
-                      <td>{e.Order.user_id}</td>
+                      <td>{e.Order?.user_id}</td>
                       <td className="information">
                         <div>Email: {e.email}</div>
                         <div>Name: {e.fullName}</div>
@@ -36,23 +68,23 @@ const OrderManager: React.FC = () => {
                         <div>Address: {e.address}</div>
                       </td>
                       <td className="information">
-                        <div>NameProduct: {e.Product.name}</div>
-                        <div>Type: {e.Product.type}</div>
+                        <div>NameProduct: {e.Product?.name}</div>
+                        <div>Type: {e.Product?.type}</div>
                         <div>Size: {e.size_product}</div>
                         <div>Quantity: {e.quantity}</div>
                       </td>
                       <td>
-                        $ {(e.Product.price * e.quantity).toLocaleString()}
+                        $ {(e.Product!.price * e.quantity!).toLocaleString()}
                       </td>
                       <td className="information">
-                        <div>{e.order_date.slice(0, 10)}</div>
-                        <div>{e.order_date.slice(11, 19)}</div>
+                        <div>{String(e.order_date!).slice(0, 10)}</div>
+                        <div>{String(e.order_date!).slice(11, 19)}</div>
                       </td>
                       <td>
                         <select
                           className="border-0 align-middle form-control"
                           value={e.status}
-                          onChange={(c) => handleChangeStatus(c, e.id)}
+                          onChange={(c) => handleChangeStatus(c, e.id!)}
                         >
                           <option value="1">Pending</option>
                           <option value="2">Processing</option>
@@ -63,36 +95,7 @@ const OrderManager: React.FC = () => {
                     </tr>
                   );
                 }
-              })} */}
-            <tr>
-              <td>44</td>
-              <td>222</td>
-              <td className="information">
-                <div>Email: ww</div>
-                <div>Name: sss</div>
-                <div>Phone: ss</div>
-                <div>Address: 2222</div>
-              </td>
-              <td className="information">
-                <div>NameProduct:222</div>
-                <div>Type: sss</div>
-                <div>Size: bbb</div>
-                <div>Quantity: sss</div>
-              </td>
-              <td>$ 222</td>
-              <td className="information">
-                <div>aaaa</div>
-                <div>aaa</div>
-              </td>
-              <td>
-                <select className="border-0 align-middle form-control">
-                  <option value="1">Pending</option>
-                  <option value="2">Processing</option>
-                  <option value="3">Out for Delivery</option>
-                  <option value="4">Delivered</option>
-                </select>
-              </td>
-            </tr>
+              })}
           </tbody>
         </table>
       </div>

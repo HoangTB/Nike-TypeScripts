@@ -1,6 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./History.css";
+import { Link, useLocation } from "react-router-dom";
+import { HistoryAPI, IHistory } from "../../models/History";
 const History: React.FC = () => {
+  const [dataHistory, setDataHistory] = useState<Array<IHistory>>([]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const userValue = localStorage.getItem("user");
+    const user = userValue ? JSON.parse(userValue) : undefined;
+    HistoryAPI.getHistoryIdOrder(user.id).then((data: any) => {
+      setDataHistory(data);
+    });
+  }, [location.pathname]);
+  const reversedDataHistory = [...dataHistory].reverse();
   return (
     <div className="pb-5 form-history">
       <div className="container flex-column">
@@ -26,8 +40,8 @@ const History: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* {dataHistory &&
-                    dataHistory?.map((e) => {
+                  {reversedDataHistory &&
+                    reversedDataHistory?.map((e: any) => {
                       return (
                         <tr key={e.id}>
                           <th scope="row" className="border-0">
@@ -79,7 +93,7 @@ const History: React.FC = () => {
                           </td>
                         </tr>
                       );
-                    })} */}
+                    })}
                 </tbody>
               </table>
             </div>

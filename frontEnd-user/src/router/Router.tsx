@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import NotFound from "../pages/NotFound/NotFound";
 import DefaultLayout from "../layout/DefaultLayout/DefaultLayout";
@@ -12,35 +12,57 @@ import Cart from "../components/Cart/Cart";
 import Payment from "../components/Payment/Payment";
 import History from "../components/History/History";
 import Profiles from "../components/Profiles/Profiles";
+import RequireLogin from "../middlewares/requireLogin";
+import { IProducts } from "../models/Product";
+import RequireUser from "../middlewares/requireUser";
 
 const Router: React.FC = () => {
+  const [filteredOptions, setFilteredOptions] = useState<
+    Array<IProducts> | undefined
+  >([]);
+  const onFilteredOptionsApp = (filteredOptions: IProducts[] | undefined) => {
+    setFilteredOptions(filteredOptions);
+  };
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/home" />} index />
-      <Route path="/home" element={<DefaultLayout children={<Home />} />} />
       <Route path="/login" element={<LoginLayout children={<Register />} />} />
-      <Route
-        path="/product"
-        element={<DefaultLayout children={<ManProducts />} />}
-      />
-      <Route path="/detail" element={<DefaultLayout children={<Detail />} />} />
-      <Route
-        path="/favorites"
-        element={<DefaultLayout children={<Favorites />} />}
-      />
-      <Route path="/cart" element={<DefaultLayout children={<Cart />} />} />
-      <Route
-        path="/payment"
-        element={<DefaultLayout children={<Payment />} />}
-      />
-      <Route
-        path="/profiles"
-        element={<DefaultLayout children={<Profiles />} />}
-      />
-      <Route
-        path="/history"
-        element={<DefaultLayout children={<History />} />}
-      />
+      <Route element={<RequireLogin />}>
+        <Route path="/" element={<Navigate to="/home" />} index />
+        <Route path="/home" element={<DefaultLayout children={<Home />} />} />
+        <Route
+          path="/detail/:id"
+          element={<DefaultLayout children={<Detail />} />}
+        />
+        <Route
+          path="/product"
+          element={
+            <DefaultLayout
+              onFilteredOptionsApp={onFilteredOptionsApp}
+              children={<ManProducts filteredOptions={filteredOptions} />}
+            />
+          }
+        />
+        <Route element={<RequireUser />}>
+          <Route
+            path="/favorites"
+            element={<DefaultLayout children={<Favorites />} />}
+          />
+          <Route path="/cart" element={<DefaultLayout children={<Cart />} />} />
+          <Route
+            path="/payment"
+            element={<DefaultLayout children={<Payment />} />}
+          />
+          <Route
+            path="/profiles"
+            element={<DefaultLayout children={<Profiles />} />}
+          />
+          <Route
+            path="/history"
+            element={<DefaultLayout children={<History />} />}
+          />
+        </Route>
+      </Route>
+
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

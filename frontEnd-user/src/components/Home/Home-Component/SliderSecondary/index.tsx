@@ -1,12 +1,13 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Slider from "react-slick";
 import "./SliderSecondary.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { SlickSliderProps } from "../../../../types/Types";
 import { Link } from "react-router-dom";
+import { IProducts, Products } from "../../../../models/Product";
 const SliderSecondary: React.FC = () => {
-  const sliderRef = useRef<SlickSliderProps>(null);
+  const sliderRef = useRef<Slider | null>(null);
+
   const settings = {
     dots: false,
     infinite: true,
@@ -34,6 +35,17 @@ const SliderSecondary: React.FC = () => {
       },
     ],
   };
+  const [cardData, setCardData] = React.useState<Array<IProducts>>([]);
+
+  useEffect(() => {
+    Products.getProduct()
+      .then((data: IProducts[]) => {
+        setCardData(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   return (
     <div className="mb-5">
       <div className="d-flex justify-content-between align-items-end mr-10 mb-3">
@@ -59,9 +71,9 @@ const SliderSecondary: React.FC = () => {
       </div>
 
       <Slider ref={sliderRef} {...settings}>
-        {/* {cardData &&
+        {cardData &&
           cardData?.map((product) => {
-            if (product.price > 400) {
+            if (product.price! > 400) {
               return (
                 <div
                   className="hover-opacity-70 duration-300 cursor-pointer position-relative p-2"
@@ -69,7 +81,7 @@ const SliderSecondary: React.FC = () => {
                 >
                   <img src={product.image} alt="..." className="img-fluid" />
                   <Link
-                    class="fa-solid fa-circle-info detail-product"
+                    className="fa-solid fa-circle-info detail-product"
                     to={`/detail/${product.id}`}
                   />
                   <div className="image-description mt-4 d-flex flex-column">
@@ -82,87 +94,7 @@ const SliderSecondary: React.FC = () => {
                 </div>
               );
             }
-          })} */}
-        <div className="hover-opacity-70 duration-300 cursor-pointer position-relative p-2">
-          <img
-            src="https://static.nike.com/a/images/q_auto:eco/t_product_v1/f_auto/dpr_1.0/w_594,c_limit/303843af-3f79-45ed-84ab-e04f6d18b07d/air-zoom-pegasus-38-yol-koşu-ayakkabısı-FGw5Ll.png"
-            alt="..."
-            className="img-fluid"
-          />
-          <Link className="fa-solid fa-circle-info detail-product" to="" />
-          <div className="image-description mt-4 d-flex flex-column">
-            <div className="d-flex flex-column">
-              <span className="text-warning">New Arrival</span>
-              <span>ABD</span>
-              <span className="mr-10">969 $</span>
-            </div>
-            <span className="opacity-50">sss</span>
-          </div>
-        </div>
-        <div className="hover-opacity-70 duration-300 cursor-pointer position-relative p-2">
-          <img
-            src="https://static.nike.com/a/images/q_auto:eco/t_product_v1/f_auto/dpr_1.0/w_594,c_limit/303843af-3f79-45ed-84ab-e04f6d18b07d/air-zoom-pegasus-38-yol-koşu-ayakkabısı-FGw5Ll.png"
-            alt="..."
-            className="img-fluid"
-          />
-          <Link className="fa-solid fa-circle-info detail-product" to="" />
-          <div className="image-description mt-4 d-flex flex-column">
-            <div className="d-flex flex-column">
-              <span className="text-warning">New Arrival</span>
-              <span>ABD</span>
-              <span className="mr-10">969 $</span>
-            </div>
-            <span className="opacity-50">sss</span>
-          </div>
-        </div>
-        <div className="hover-opacity-70 duration-300 cursor-pointer position-relative p-2">
-          <img
-            src="https://static.nike.com/a/images/q_auto:eco/t_product_v1/f_auto/dpr_1.0/w_594,c_limit/303843af-3f79-45ed-84ab-e04f6d18b07d/air-zoom-pegasus-38-yol-koşu-ayakkabısı-FGw5Ll.png"
-            alt="..."
-            className="img-fluid"
-          />
-          <Link className="fa-solid fa-circle-info detail-product" to="" />
-          <div className="image-description mt-4 d-flex flex-column">
-            <div className="d-flex flex-column">
-              <span className="text-warning">New Arrival</span>
-              <span>ABD</span>
-              <span className="mr-10">969 $</span>
-            </div>
-            <span className="opacity-50">sss</span>
-          </div>
-        </div>
-        <div className="hover-opacity-70 duration-300 cursor-pointer position-relative p-2">
-          <img
-            src="https://static.nike.com/a/images/q_auto:eco/t_product_v1/f_auto/dpr_1.0/w_594,c_limit/303843af-3f79-45ed-84ab-e04f6d18b07d/air-zoom-pegasus-38-yol-koşu-ayakkabısı-FGw5Ll.png"
-            alt="..."
-            className="img-fluid"
-          />
-          <Link className="fa-solid fa-circle-info detail-product" to="" />
-          <div className="image-description mt-4 d-flex flex-column">
-            <div className="d-flex flex-column">
-              <span className="text-warning">New Arrival</span>
-              <span>ABD</span>
-              <span className="mr-10">969 $</span>
-            </div>
-            <span className="opacity-50">sss</span>
-          </div>
-        </div>
-        <div className="hover-opacity-70 duration-300 cursor-pointer position-relative p-2">
-          <img
-            src="https://static.nike.com/a/images/q_auto:eco/t_product_v1/f_auto/dpr_1.0/w_594,c_limit/303843af-3f79-45ed-84ab-e04f6d18b07d/air-zoom-pegasus-38-yol-koşu-ayakkabısı-FGw5Ll.png"
-            alt="..."
-            className="img-fluid"
-          />
-          <Link className="fa-solid fa-circle-info detail-product" to="" />
-          <div className="image-description mt-4 d-flex flex-column">
-            <div className="d-flex flex-column">
-              <span className="text-warning">New Arrival</span>
-              <span>ABD</span>
-              <span className="mr-10">969 $</span>
-            </div>
-            <span className="opacity-50">sss</span>
-          </div>
-        </div>
+          })}
       </Slider>
     </div>
   );

@@ -1,15 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./ProductManager.css";
 import { IProducts, ProductsServer } from "../../models/Product";
+import ConfirmDelete from "../Modal/Confirm-Delete/Confirm-Delete";
+import Loading from "../Loading/Loading";
+import FormUpdate from "../Modal/FormUpdate/FormUpdate";
+import FormCreate from "../Modal/FormCreate/FormCreate";
 const ProductManager: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLoadings, setIsLoadings] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadings, setIsLoadings] = useState<boolean>(false);
   const [isShow, setIsShow] = useState(false);
-  const idDelete = useRef();
-  const idUpdate = useRef();
-  const [isShowFormEdit, setIsShowFormEdit] = useState(false);
+  const idDelete = useRef<number | null>(null);
+  const idUpdate = useRef<number | null>(null);
+  const [isShowFormEdit, setIsShowFormEdit] = useState<boolean>(false);
   const [isShowFormCreate, setIsShowFormCreate] = useState(false);
-  const [dataEdit, setDataEdit] = useState([]);
+  const [dataEdit, setDataEdit] = useState<IProducts[] | []>([]);
   const [products, setProduct] = React.useState<Array<IProducts>>([]);
   const [currentPage, setCurrentPage] = React.useState(1);
   const productsPerPage = 10;
@@ -19,7 +23,7 @@ const ProductManager: React.FC = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [isLoading]);
   // Tính toán sản phẩm hiển thị trên trang hiện tại
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -37,16 +41,18 @@ const ProductManager: React.FC = () => {
     setIsShow(false);
     setIsLoadings(false);
   };
-  const handleLoading = (id: number) => {
+  const handleLoading = () => {
     setIsLoading(!isLoading);
     setIsLoadings(false);
   };
 
   const handleEdit = async (id: number) => {
     setIsShowFormEdit(!isShowFormEdit);
+
     idUpdate.current = id;
-    const values = await Products.getProductById(id);
-    setDataEdit(values);
+
+    const values: IProducts = await ProductsServer.getProductById(id);
+    setDataEdit([values]);
 
     setIsLoadings(false);
   };
@@ -58,7 +64,7 @@ const ProductManager: React.FC = () => {
   };
   return (
     <div className="content-user">
-      {/* {isLoadings && <Loading />}
+      {isLoadings && <Loading />}
       {isShow && (
         <ConfirmDelete
           handleCancel={handleCancel}
@@ -76,11 +82,16 @@ const ProductManager: React.FC = () => {
       )}
       {isShowFormCreate && (
         <FormCreate handleCreate={handleCreate} handleLoading={handleLoading} />
-      )} */}
+      )}
       <div className="table-content">
         <div className="wrappers-title">
           <h1 className="title-page">PRODUCT-MANAGER</h1>
-          <button className="btn btn-info btn-create">CREATE</button>
+          <button
+            className="btn btn-info btn-create"
+            onClick={() => handleCreate()}
+          >
+            CREATE
+          </button>
         </div>
         <table>
           <thead>
@@ -114,14 +125,14 @@ const ProductManager: React.FC = () => {
                     <td>
                       <button
                         className="btn btn-warning"
-                        // onClick={() => handleEdit(product.id)}
+                        onClick={() => handleEdit(product.id)}
                       >
                         EDIT
                       </button>{" "}
                       {""}{" "}
                       <button
                         className="btn btn-danger"
-                        // onClick={() => handleDeleteProduct(product.id)}
+                        onClick={() => handleDeleteProduct(product.id)}
                       >
                         DELETE
                       </button>

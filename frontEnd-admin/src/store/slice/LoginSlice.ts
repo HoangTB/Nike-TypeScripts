@@ -8,7 +8,7 @@ export const login = createAsyncThunk(
       const response: ILogin = await Login.LoginAdmin(adminData);
 
       localStorage.setItem("admin", JSON.stringify(response.data.user));
-      localStorage.setItem("token", response.data.accessToken);
+      localStorage.setItem("accessToken", response.data.accessToken);
       return response;
     } catch (err) {
       throw err;

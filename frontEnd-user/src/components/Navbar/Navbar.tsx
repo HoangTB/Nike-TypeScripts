@@ -1,7 +1,44 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import "./Navibar.css";
-const Navibar: React.FC = () => {
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import "./Navbar.css";
+import { useSelector } from "react-redux";
+import { Products } from "../../models/Product";
+import { INavibarProps } from "../../types/Types";
+const Navbar: React.FC<INavibarProps> = ({ onFilteredOptions }) => {
+  const location = useLocation();
+  const update = useSelector((state: any) => state.update);
+  const [dataCart, setDataCart] = useState([]);
+  const [cardData, setCardData] = useState([]);
+  const [isNaviCenterVisible, setIsNaviCenterVisible] = useState<boolean>(true);
+  const userData = localStorage.getItem("user");
+  const user = userData ? JSON.parse(userData) : undefined;
+  useEffect(() => {
+    if (user && user.id) {
+      Products.getProductMerger(user.id)
+        .then((product: any) => {
+          setDataCart(product[0]?.OrderDetails);
+        })
+        .catch();
+    }
+  }, [update, location.pathname]);
+
+  useEffect(() => {
+    Products.getProduct().then((data: any) => setCardData(data)).catch;
+  }, []);
+
+  const handleFilterByType = async (types: any) => {
+    const filteredOptions = cardData?.filter((option: any) =>
+      types.includes(option.type)
+    );
+    console.log(filteredOptions);
+
+    await onFilteredOptions(filteredOptions);
+  };
+
+  const toggleNaviCenterVisibility = () => {
+    setIsNaviCenterVisible((prevState) => !prevState);
+  };
+
   return (
     <div className="navibar">
       <div className="navibar-down">
@@ -15,7 +52,7 @@ const Navibar: React.FC = () => {
         </div>
         <div
           className="navi-center"
-          // style={{ display: isNaviCenterVisible ? "block" : "none" }}
+          style={{ display: isNaviCenterVisible ? "block" : "none" }}
         >
           <ul className="nav nav-underline">
             <Link className="nav-link" to={"/product"}>
@@ -23,13 +60,13 @@ const Navibar: React.FC = () => {
                 id="list-nam"
                 className=""
                 role="button"
-                // onClick={() =>
-                //   handleFilterByType([
-                //     "Men's Shoes",
-                //     "Woman's Shoes",
-                //     "Kid's Shoes",
-                //   ])
-                // }
+                onClick={() =>
+                  handleFilterByType([
+                    "Men's Shoes",
+                    "Woman's Shoes",
+                    "Kid's Shoes",
+                  ])
+                }
               >
                 all shoes
               </li>
@@ -43,7 +80,7 @@ const Navibar: React.FC = () => {
               <li
                 id="list-nam"
                 className=""
-                // onClick={() => handleFilterByType("Men's Shoes")}
+                onClick={() => handleFilterByType("Men's Shoes")}
               >
                 men
               </li>
@@ -53,7 +90,7 @@ const Navibar: React.FC = () => {
               <li
                 id="list-nam"
                 className=""
-                // onClick={() => handleFilterByType("Woman's Shoes")}
+                onClick={() => handleFilterByType("Woman's Shoes")}
               >
                 women
               </li>
@@ -63,7 +100,7 @@ const Navibar: React.FC = () => {
               <li
                 id="list-nam"
                 className=""
-                // onClick={() => handleFilterByType("Kid's Shoes")}
+                onClick={() => handleFilterByType("Kid's Shoes")}
               >
                 kid
               </li>
@@ -81,13 +118,13 @@ const Navibar: React.FC = () => {
             to="/cart"
           >
             <span className="position-absolute">
-              {/* {dataCart ? dataCart.length : 0} */}
+              {user && dataCart ? dataCart.length : 0}
             </span>
           </Link>
           <Link
             className="fa-solid fa-list"
-            to="/cart"
-            // onClick={toggleNaviCenterVisibility}
+            to=""
+            onClick={toggleNaviCenterVisibility}
           ></Link>
         </div>
       </div>
@@ -95,4 +132,4 @@ const Navibar: React.FC = () => {
   );
 };
 
-export default Navibar;
+export default Navbar;

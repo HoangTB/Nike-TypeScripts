@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import orderServices from '../services/order.services';
+import { IOrder } from '../../types/Type';
 
 class orderController {
   postOrder = (req: Request, res: Response) => {
-    const data = req.body;
+    const data: IOrder = req.body;
     orderServices.postOrder(data, res);
   };
   getOrder = (req: Request, res: Response) => {

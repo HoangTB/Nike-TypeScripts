@@ -1,6 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { IUser, UserAPIServer } from "../../models/User";
 import "./UserManager.css";
 const UserManager: React.FC = () => {
+  const [users, setUsers] = useState<Array<IUser>>([]);
+  const [isLoading, setLoading] = useState(false);
+  useEffect(() => {
+    UserAPIServer.getAllUser().then((data) => setUsers(data));
+  }, [isLoading]);
+
+  const handleBlockActive = async (id: number) => {
+    const response: any = await UserAPIServer.getAllUserById(id);
+    if (response[0].role === 1) {
+      if (response[0].status === 1) {
+        try {
+          await UserAPIServer.updateStatus(id);
+        } catch (error) {
+          console.error("Error updating user status:", error);
+        }
+      } else {
+        try {
+          await UserAPIServer.updateStatus(id);
+        } catch (error) {
+          console.error("Error updating user status:", error);
+        }
+      }
+    }
+
+    setLoading(!isLoading);
+  };
+
+  const handleAdmin = async (id: number) => {
+    const response: any = await UserAPIServer.getAllUserById(id);
+    if (response[0].role === 1) {
+      try {
+        await UserAPIServer.updateActive(id);
+      } catch (error) {
+        console.error("Error updating user status:", error);
+      }
+    } else {
+      try {
+        await UserAPIServer.updateActive(id);
+      } catch (error) {
+        console.error("Error updating user status:", error);
+      }
+    }
+    setLoading(!isLoading);
+  };
   return (
     <div className="content-user">
       <div className="table-content">
@@ -20,7 +65,7 @@ const UserManager: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {/* {users &&
+            {users &&
               users.map((user) => {
                 return (
                   <tr key={user.id}>
@@ -72,7 +117,7 @@ const UserManager: React.FC = () => {
                     </td>
                   </tr>
                 );
-              })} */}
+              })}
           </tbody>
         </table>
       </div>

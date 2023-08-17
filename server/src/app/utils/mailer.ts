@@ -44,7 +44,9 @@ const sendRegistrationEmail = async (data: any) => {
               alt=""
               style="width:100px"
             />
-          <h1>Congratulations! ${data?.email} has successfully made a purchase !</h1>
+          <h1>
+          Thank you to the customer ${data?.email} for the successful purchase!
+          </h1>
           <p>Full Name: ${data?.fullName}</p>
           <p>Email: ${data?.email}</p>
           <p>Address: ${data?.phone}</p>

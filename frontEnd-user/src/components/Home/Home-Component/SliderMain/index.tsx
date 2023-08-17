@@ -4,11 +4,10 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./SliderMain.css";
 import { Link } from "react-router-dom";
-import { SlickSliderProps } from "../../../../types/Types";
 import { IProducts, Products } from "../../../../models/Product";
 
 const SliderMain: React.FC = () => {
-  const sliderRef = useRef<SlickSliderProps>(null);
+  const sliderRef = useRef<Slider | null>(null);
   const settings = {
     dots: false,
     infinite: true,

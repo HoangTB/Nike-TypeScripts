@@ -5,10 +5,46 @@ export interface LoginRegisterFormProps {
 }
 
 export interface DefaultLayoutProps {
-  children: ReactNode;
+  children?: ReactNode;
+  onFilteredOptionsApp?: (filteredOptions: any[]) => void;
 }
 
 export interface SlickSliderProps {
   slickPrev: () => void;
   slickNext: () => void;
+}
+
+export interface IErrorsRegister {
+  email?: string;
+  password?: string;
+  firstName?: string;
+  lastName?: string;
+  birthday?: string;
+}
+
+export interface IErrorsLogin {
+  email?: string;
+  password?: string;
+}
+
+export interface INavibarProps {
+  onFilteredOptions: (filteredOptions: any[]) => void;
+}
+
+export interface IProfile {
+  id?: number | undefined;
+  email?: string;
+  password?: string;
+  firstName?: string | undefined;
+  lastName?: string | undefined;
+  birthday?: string | undefined;
+  role?: number;
+  status?: number;
+}
+
+export interface IErrorsPayment {
+  fullName?: string;
+  email?: string;
+  address?: string;
+  phone?: string;
 }

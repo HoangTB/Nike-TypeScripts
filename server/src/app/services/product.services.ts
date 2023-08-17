@@ -48,7 +48,8 @@ class productServices {
           id: id,
         },
       });
-      res.status(200).json(product);
+
+      res.status(200).json(product[0].dataValues);
     } catch (err) {
       res.status(500).json({ message: 'Error Get Product', err });
     }

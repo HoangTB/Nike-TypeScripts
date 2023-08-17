@@ -49,6 +49,7 @@ const Thanks: React.FC<any> = ({ dataArr, handleCloseForm }) => {
               height: 48,
             }}
             createOrder={(data, actions) => {
+              console.log(data);
               return actions.order.create({
                 purchase_units: [
                   {

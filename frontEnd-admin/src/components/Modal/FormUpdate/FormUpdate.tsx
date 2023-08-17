@@ -96,7 +96,7 @@ const FormUpdate: React.FC<IFormUpdate> = ({
       };
 
       try {
-        const response = await axios.patch(
+        const response: any = await axios.patch(
           `http://localhost:8080/api/v1/products/admin-update/${idUpdate}`,
           formProduct,
           {
@@ -105,7 +105,7 @@ const FormUpdate: React.FC<IFormUpdate> = ({
             },
           }
         );
-        // console.log(111, response.data);
+        console.log(111, response.data);
       } catch (error) {
         console.error(error);
       }
@@ -116,7 +116,7 @@ const FormUpdate: React.FC<IFormUpdate> = ({
       formImage.append("images", image4);
 
       try {
-        const response = await axios.patch(
+        const response: any = await axios.patch(
           `http://localhost:8080/api/v1/images/admin-update/${idUpdate}`,
           formImage,
           {
@@ -125,7 +125,7 @@ const FormUpdate: React.FC<IFormUpdate> = ({
             },
           }
         );
-        // console.log(333, response.data);
+        console.log(333, response.data);
       } catch (error) {
         console.error(error);
       }

@@ -8,7 +8,6 @@ import ProductManager from "../components/ProductManager/ProductManager";
 import OrderManager from "../components/OrderManager/OrderManager";
 import RevenueManager from "../components/RevenueManager/RevenueManager";
 import NotFound from "../pages/NotFound/NotFound";
-import RequiredAdmin from "../middlewares/requireAdmin";
 import AdminOutlet from "../middlewares/requireAdmin";
 
 const Router: React.FC = () => {

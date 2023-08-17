@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { IProducts } from "../../../models/Product";
 const Card: React.FC<{ options: IProducts[] | undefined }> = ({ options }) => {
   const sidebarValue = useSelector((state: any) => state.sidebar);
+  console.log(options);
 
   const dataFilterPrice = options?.filter(
     (o: any) =>
@@ -14,6 +15,7 @@ const Card: React.FC<{ options: IProducts[] | undefined }> = ({ options }) => {
 
   const itemsToPrice =
     dataFilterPrice && dataFilterPrice.length > 0 ? dataFilterPrice : options;
+  console.log(itemsToPrice);
 
   return (
     <>

@@ -15,6 +15,8 @@ import cookieParser from 'cookie-parser';
 const corsOrigin = [
   // 'https://nike-ten-mu.vercel.app',
   // 'https://nike-tfgk.vercel.app',
+  'https://nike-type-scripts-4u2mzo7rj-tbhoang95-gmailcom.vercel.app',
+  'https://nike-type-scripts-e63y-pe1ep9jq7-tbhoang95-gmailcom.vercel.app',
   'http://localhost:3000',
   'http://localhost:5000',
 ];

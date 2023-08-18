@@ -4,6 +4,7 @@ import { secret } from '../../configs/jwt.configs';
 import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
 import { UserType } from '../../types/Type';
+import Order from '../models/order.model';
 let refreshTokenArr: any = [];
 class UserService {
   getUser = async (req: Request, res: Response) => {
@@ -17,6 +18,20 @@ class UserService {
   getUserId = async (id: number, res: Response) => {
     try {
       const users = await User.findAll({
+        where: {
+          id: id,
+        },
+      });
+      res.status(200).json(users);
+    } catch (err) {
+      res.status(500).json({ message: 'Get users failed', err });
+    }
+  };
+
+  getUserIdOrder = async (id: number, res: Response) => {
+    try {
+      const users = await User.findOne({
+        include: [{ model: Order }],
         where: {
           id: id,
         },

@@ -13,8 +13,8 @@ import cookieParser from 'cookie-parser';
 // import paypal from 'paypal-rest-sdk';
 // import { paypalConfig } from '../configs/paypal-config';
 const corsOrigin = [
-  // 'https://nike-type-scripts-ry6v.vercel.app',
-  // 'https://nike-type-scripts.vercel.app',
+  'https://nike-type-scripts-q593.vercel.app',
+  'https://nike-type-scripts.vercel.app',
   'http://localhost:3000',
   'http://localhost:5000',
 ];

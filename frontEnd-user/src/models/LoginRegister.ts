@@ -46,6 +46,10 @@ export class UserAPI {
     const url = `http://localhost:8080/api/v1/users/${id}/`;
     return axios.get(url);
   }
+  static getUserIdOrder(id: number) {
+    const url = `api/v1/users/order/${id}/`;
+    return axiosClient.get(url);
+  }
   static updateUser(id: number, param: IRegister) {
     const url = `http://localhost:8080/api/v1/users/update-user/${id}`;
     return axios.patch(url, param);

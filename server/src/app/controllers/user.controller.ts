@@ -10,7 +10,10 @@ class userController {
     const id: number = Number(req.params.id);
     userServices.getUserId(id, res);
   };
-
+  getUserIdOrder = (req: Request, res: Response) => {
+    const id: number = Number(req.params.id);
+    userServices.getUserIdOrder(id, res);
+  };
   createUser = (req: Request, res: Response) => {
     const data = req.body;
     userServices.createUser(data, res);

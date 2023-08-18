@@ -7,6 +7,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { IProductMerger, Products } from "../../models/Product";
 import { IUpdateOrderDetail, OrderDetail } from "../../models/OrderDetail";
 import { updateState } from "../../store/slice/UpdateProSlice";
+import { UserAPI } from "../../models/LoginRegister";
 const Cart: React.FC = () => {
   let quantityTotal = 0;
   let priceTotal = 0;
@@ -43,21 +44,23 @@ const Cart: React.FC = () => {
   console.log(dataCart);
 
   const handleToPayment = () => {
-    OrderDetail.getOrderDetailById(user.id).then((data) => {
-      if (data.length === 0) {
-        toast.error("Please order products !", {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      } else {
-        navigate("/payment");
-      }
+    UserAPI.getUserIdOrder(user.id).then((res: any) => {
+      return OrderDetail.getOrderDetailById(res.Order.id).then((data) => {
+        if (data.length === 0) {
+          toast.error("Please order products !", {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          navigate("/payment");
+        }
+      });
     });
   };
   return (
